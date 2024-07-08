@@ -1,0 +1,9 @@
+{% load static %}
+<h1>Django Todo App</h1>
+<img src="{% static 'logo.svg' %}" alt="Fly logo"
+    style="width:500px; height: 500px;">
+<ul>
+  {% for text in todo_list %}
+    <li>{{ text.todo }}</li>
+  {% endfor %}
+</ul>
