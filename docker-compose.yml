@@ -1,0 +1,35 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.py
+      args:
+        YOUR_ENV: development
+    command: python -Wd manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.dev
+    volumes:
+      - .:/code:rw
+    depends_on:
+      - db
+    networks:
+      - mcadmin
+
+  db:
+    image: postgres:16.3-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.dev
+    networks:
+      - mcadmin
+
+volumes:
+  postgres_data:
+
+
+networks:
+  mcadmin:
