@@ -31,6 +31,12 @@ SECRET_KEY = env.str(
 )
 DEBUG = env.bool("DEBUG", default=False)  # new
 
+# SECURITY WARNING: don't run with debug turned on in production!
+# MINECRAFT RCON SETTINGS
+RCON_HOST = env.str("RCON_HOST", default='127.0.0.1')  # new
+RCON_PORT = env.int("RCON_PORT", default=25575)  # new
+RCON_PASS = env.str("RCON_PASS", default='mysecretpassword')  # new
+
 # ALLOWED_HOSTS = ["*"]
 # CSRF_TRUSTED_ORIGINS = ["https://*.fly.dev"]
 
@@ -49,7 +55,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "whitenoise.runserver_nostatic",  # new
     "django.contrib.staticfiles",
+    "compressor",  # new
     "todo",  # new
+    "user",  # new
 ]
 
 MIDDLEWARE = [
@@ -68,7 +76,7 @@ ROOT_URLCONF = "mcadmin.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        'DIRS': ['templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -135,3 +143,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage" 
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+COMPRESS_ROOT = BASE_DIR / "static"
+COMPRESS_ENABLED = True
+STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)

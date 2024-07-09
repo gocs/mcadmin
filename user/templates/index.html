@@ -1,0 +1,19 @@
+{% extends "_base.html" %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <ul class="flex justify-end font-mono text-xl font-black">
+            <li class="flex-1"><p class="text-green-800">{{ request.user.username }}</p></li>
+            <li><a href="{% url 'logout' %}">logout</a></li>
+        </ul>
+
+        <p class="my-8">{{ whitelist_list }}</p>
+
+    {% else %}
+        <ul class="flex justify-end font-mono text-xl font-black">
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'signup' %}">Signup</a></li>
+        </ul>
+    {% endif %}
+
+{% endblock content %}

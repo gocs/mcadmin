@@ -1,5 +1,11 @@
 # McAdmin
 
+## todo
+
+- [ ] user management
+- [ ] user role
+- [ ] minecraft whitelist
+
 ## commands
 
 - `poetry install`
