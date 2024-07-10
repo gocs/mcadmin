@@ -1,7 +1,13 @@
-<h1>Login</h1>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-    <a href="{% url 'signup' %}">Dont have Account Create</a>
-</form>
+{% extends "_base.html" %}
+
+{% block content %}
+    <div class="flex justify-end w-full gap-3">
+        <h1 class="p-3 text-xl font-mono font-bold">login</h1>
+        <form method="POST" class="flex flex-col w-96 bg-green-200 p-3 gap-3">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="bg-green-600/30 p-3 uppercase">login</button>
+            <a href="{% url 'signup' %}" class="bg-yellow-600/30 p-3">Dont have Account Create</a>
+        </form>
+    </div>
+{% endblock content %}

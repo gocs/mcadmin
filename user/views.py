@@ -21,8 +21,9 @@ def index(request):
     logger.info("RCON_PORT: %s" % port)
     logger.info("RCON_PASS: %s" % passwd)
 
-    with Client(host, port, passwd=passwd) as client:
-        whitelist_list = client.run('whitelist', 'list')
+    whitelist_list=''
+    # with Client(host, port, passwd=passwd) as client:
+    #     whitelist_list = client.run('whitelist', 'list')
 
     return render(request, 'index.html', {'whitelist_list': whitelist_list})
 
@@ -36,16 +37,16 @@ def index(request):
 #     print(response)
 #     return render(request, 'index.html')
 
-# signup page
-def user_signup(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-    else:
-        form = SignupForm()
-    return render(request, 'signup.html', {'form': form})
+# # signup page
+# def user_signup(request):
+#     if request.method == 'POST':
+#         form = SignupForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('login')
+#     else:
+#         form = SignupForm()
+#     return render(request, 'signup.html', {'form': form})
 
 # login page
 def user_login(request):

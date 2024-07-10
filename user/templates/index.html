@@ -10,9 +10,9 @@
         <p class="my-8">{{ whitelist_list }}</p>
 
     {% else %}
-        <ul class="flex justify-end font-mono text-xl font-black">
-            <li><a href="{% url 'login' %}">Login</a></li>
-            <li><a href="{% url 'signup' %}">Signup</a></li>
+        <ul class="flex justify-end font-mono text-xl font-black gap-3">
+            <li class="flex-1"><h1>MC Admin</h1></li>
+            <li><a href="{% url 'login' %}" class="p-3 border">Login</a></li>
         </ul>
     {% endif %}
 
