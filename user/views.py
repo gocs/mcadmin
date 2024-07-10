@@ -5,7 +5,7 @@ from django.conf import settings
 from rcon.source import rcon
 from rcon.source import Client
 import httpx
-# import asyncio
+import asyncio
 import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='general.log', level=logging.INFO)
@@ -16,7 +16,9 @@ passwd=settings.RCON_PASS
 
 # Create your views here.
 # Home page
-def index(request):
+async def index(request):
+    await asyncio.sleep(1)
+
     logger.info("RCON_HOST: %s" % host)
     logger.info("RCON_PORT: %s" % port)
     logger.info("RCON_PASS: %s" % passwd)
