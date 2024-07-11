@@ -4,6 +4,8 @@ from .forms import SignupForm, LoginForm
 from django.conf import settings
 from rcon.source import rcon
 from rcon.source import Client
+from asgiref.sync import sync_to_async
+
 import httpx
 import asyncio
 import logging
@@ -17,8 +19,6 @@ passwd=settings.RCON_PASS
 # Create your views here.
 # Home page
 async def index(request):
-    await asyncio.sleep(1)
-
     logger.info("RCON_HOST: %s" % host)
     logger.info("RCON_PORT: %s" % port)
     logger.info("RCON_PASS: %s" % passwd)
@@ -26,8 +26,10 @@ async def index(request):
     whitelist_list=''
     # with Client(host, port, passwd=passwd) as client:
     #     whitelist_list = client.run('whitelist', 'list')
-
-    return render(request, 'index.html', {'whitelist_list': whitelist_list})
+    return render(request, 'index.html', {
+        'whitelist_list': whitelist_list,
+        "is_authenticated": await sync_to_async(lambda: request.user.is_authenticated)(),
+    })
 
 # # Home page async
 # async def index(request):

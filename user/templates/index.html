@@ -1,7 +1,7 @@
 {% extends "_base.html" %}
 
 {% block content %}
-    {% if request.user.is_authenticated %}
+    {% if is_authenticated %}
         <ul class="flex justify-end font-mono text-xl font-black">
             <li class="flex-1"><p class="text-green-800">{{ request.user.username }}</p></li>
             <li><a href="{% url 'logout' %}">logout</a></li>
