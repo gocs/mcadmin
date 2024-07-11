@@ -1,5 +1,4 @@
 {% extends "_base.html" %}
-
 {% block content %}
     {% if is_authenticated %}
         <ul class="flex justify-end font-mono text-xl font-black">
@@ -7,8 +6,93 @@
             <li><a href="{% url 'logout' %}">logout</a></li>
         </ul>
 
+        <p class="my-8">({{ status }})</p>
         <p class="my-8">{{ whitelist_list }}</p>
 
+        <div class="grid grid-cols-5 w-full">
+            <div class="grid-cols-5 md:col-span-3">
+                <h1 class="text-2xl font-black text-green-600">Payments</h1>
+                <div class="relative overflow-x-auto p-2">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Player
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Amount
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Date
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in z__payments %}
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ payment.z__player }}
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{ payment.amount }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ payment.date }}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td class="italic px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        No payments found
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="grid-cols-5 md:col-span-2">
+                <h1 class="text-2xl font-black text-green-600">Players</h1>
+                <div class="relative overflow-x-auto p-2">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    UUID
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Joined Date
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for player in players %}
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ player.name }}
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{ player.uuid }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ player.joined }}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td class="italic px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        No players found
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     {% else %}
         <ul class="flex justify-end font-mono text-xl font-black gap-3">
             <li class="flex-1"><h1>MC Admin</h1></li>

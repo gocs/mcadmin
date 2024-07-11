@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from .forms import SignupForm, LoginForm
-from django.conf import settings
+from django.views.generic import ListView
 from rcon.source import rcon
-from rcon.source import Client
 from asgiref.sync import sync_to_async
+
+from .forms import SignupForm, LoginForm, PlayerForm, PaymentForm
+from .models import Player, Payment
+from .minecraft import execute_command, color_codes_replacer
 
 import httpx
 import asyncio
@@ -12,34 +14,40 @@ import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='general.log', level=logging.INFO)
 
-host=settings.RCON_HOST
-port=settings.RCON_PORT
-passwd=settings.RCON_PASS
-
 # Create your views here.
 # Home page
 async def index(request):
-    logger.info("RCON_HOST: %s" % host)
-    logger.info("RCON_PORT: %s" % port)
-    logger.info("RCON_PASS: %s" % passwd)
+    whitelist_list = ""
+    try: whitelist_list = await execute_command('whitelist', 'list')
+    except Exception as e: logger.critical("err whitelist_list: %s" % e)
 
-    whitelist_list=''
-    # with Client(host, port, passwd=passwd) as client:
-    #     whitelist_list = client.run('whitelist', 'list')
+    status = ""
+    try: status = await execute_command('tps')
+    except Exception as e: logger.critical("err status: %s" % e)
+
+    players = []
+    try: players = [p async for p in Player.objects.all()]
+    except Exception as e: logger.critical("err players: %s" % e)
+
+    payments = []
+    try: payments = [p async for p in Payment.objects.all()]
+    except Exception as e: logger.critical("err payments: %s" % e)
+
+    # convert players in payments to sync
+    z__payments = []
+    for payment in payments:
+        payment.z__player = await sync_to_async(lambda: payment.player)()
+        z__payments.append(payment)
+
     return render(request, 'index.html', {
-        'whitelist_list': whitelist_list,
+        'whitelist_list': color_codes_replacer(whitelist_list),
+        'status': color_codes_replacer(status),
+        'players': players,
+        'z__payments': z__payments,
         "is_authenticated": await sync_to_async(lambda: request.user.is_authenticated)(),
     })
 
-# # Home page async
-# async def index(request):
-#     logger.info("RCON_HOST: %s" % host)
-#     logger.info("RCON_PORT: %s" % port)
-#     logger.info("RCON_PASS: %s" % passwd)
 
-#     response = await rcon('help', host=host, port=port, passwd=passwd)
-#     print(response)
-#     return render(request, 'index.html')
 
 # # signup page
 # def user_signup(request):
@@ -59,7 +67,8 @@ def user_login(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
+            try: user = authenticate(request, username=username, password=password)
+            except: user = None
             if user:
                 login(request, user)
                 return redirect('home')
