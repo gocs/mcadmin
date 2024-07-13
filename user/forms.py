@@ -18,14 +18,4 @@ class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={"class": "w-full"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "w-full"}))
 
-# PlayerForm these players are whitelisted
-class PlayerForm(forms.ModelForm):
-    class Meta:
-        model = Player
-        fields = ['id', 'uuid']
 
-# PaymentForm these are the payments made by the players
-class PaymentForm(forms.ModelForm):
-    class Meta:
-        model = Payment
-        fields = ['player', 'amount']

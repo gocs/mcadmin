@@ -8,20 +8,20 @@ down:
 	docker compose down
 
 startapp:
-	docker exec -it mcadmin-web-1 python manage.py startapp ${APP_NAME}
+	docker exec -it mcadmin-web-1 ./manage.py startapp ${APP_NAME}
 	docker exec -it mcadmin-web-1 chmod 777 -R ${APP_NAME}/
 
 makemigrations:
-	docker exec -it mcadmin-web-1 python manage.py makemigrations
+	docker exec -it mcadmin-web-1 ./manage.py makemigrations
 
 migrate:
-	docker exec -it mcadmin-web-1 python manage.py migrate
+	docker exec -it mcadmin-web-1 ./manage.py migrate
 
 createsuperuser:
-	docker exec -it mcadmin-web-1 python manage.py createsuperuser
+	docker exec -it mcadmin-web-1 ./manage.py createsuperuser
 
 collectstatic:
-	docker exec -it mcadmin-web-1 python manage.py collectstatic
+	docker exec -it mcadmin-web-1 ./manage.py collectstatic
 
 clear:
 	docker exec -it mcadmin-web-1 cp /dev/null general.log

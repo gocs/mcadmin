@@ -1,15 +1,13 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.views.generic import ListView
-from rcon.source import rcon
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from asgiref.sync import sync_to_async
 
-from .forms import SignupForm, LoginForm, PlayerForm, PaymentForm
+from .forms import SignupForm, LoginForm
 from .models import Player, Payment
 from .minecraft import execute_command, color_codes_replacer
 
-import httpx
 import asyncio
+
 import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='general.log', level=logging.INFO)
@@ -22,12 +20,8 @@ async def index(request):
     except Exception as e: logger.critical("err whitelist_list: %s" % e)
 
     status = ""
-    try: status = await execute_command('tps')
+    try: status = await execute_command('tps') # get server tick and memory usage
     except Exception as e: logger.critical("err status: %s" % e)
-
-    players = []
-    try: players = [p async for p in Player.objects.all()]
-    except Exception as e: logger.critical("err players: %s" % e)
 
     payments = []
     try: payments = [p async for p in Payment.objects.all()]
@@ -39,15 +33,48 @@ async def index(request):
         payment.z__player = await sync_to_async(lambda: payment.player)()
         z__payments.append(payment)
 
+    players = []
+    try: players = [p async for p in Player.objects.all()]
+    except Exception as e: logger.critical("err players: %s" % e)
+
+    # convert players into sync
+    z__players = []
+    for player in players:
+        player.z__user = await sync_to_async(lambda: player.id)()
+        z__players.append(player)
+
+    player = {}
+    payment = {}
+    if request.method == 'GET':
+        p = request.GET.get("player", "")
+        if p != "":
+            try: player = await sync_to_async(lambda: Player.objects.get(uuid=p))()
+            except Exception as e: logger.warning("err getting player from request: %s" % e)
+
+        p = request.GET.get("payment", "")
+        if p != "":
+            try: payment = await sync_to_async(lambda: Payment.objects.get(id=p))()
+            except Exception as e: logger.warning("err getting payment from request: %s" % e)
+
+    if player:
+        player.z__user = await sync_to_async(lambda: player.id)()
+
+    if payment:
+        payment.z__player = await sync_to_async(lambda: payment.player)()
+
+    # get all users to be a player
+    users = [u async for u in get_user_model().objects.all()]
+
     return render(request, 'index.html', {
         'whitelist_list': color_codes_replacer(whitelist_list),
         'status': color_codes_replacer(status),
-        'players': players,
+        'z__players': z__players,
         'z__payments': z__payments,
+        'users': users,
+        "player": player,
+        "payment": payment,
         "is_authenticated": await sync_to_async(lambda: request.user.is_authenticated)(),
     })
-
-
 
 # # signup page
 # def user_signup(request):

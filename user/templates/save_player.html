@@ -1,0 +1,8 @@
+{% csrf_token %}
+<input type="text" name="name" class="mb-2" placeholder="minecraft username" required value="{{ player.name }}">
+<select name="id" class="mb-2" required value="{{ player.z__user.id }}">
+    {% for user in users %}
+        <option value="{{ user.id }}" {% if player.z__user.id == user.id %}selected{% endif %}>{{ user.username }}</option>
+    {% endfor %}
+</select>
+<button type="submit" class="h-full p-2 mb-2 bg-green-300 hover:bg-green-400" value="{{ player.uuid }}" name="save">save</button>

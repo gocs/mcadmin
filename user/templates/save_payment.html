@@ -1,0 +1,8 @@
+{% csrf_token %}
+<select name="player" class="mb-2" required value="{{ payment.z__player.uuid }}">
+    {% for player in z__players %}
+        <option value="{{ player.uuid }}" {% if payment.z__player.uuid == player.uuid %}selected{% endif %}>{{ player.name }}</option>
+    {% endfor %}
+</select>
+<input type="number" name="amount" class="mb-2" placeholder="amount" required value="{{ payment.amount }}">
+<button type="submit" class="h-full p-2 mb-2 bg-green-300 hover:bg-green-400" value="{{ payment.id }}" name="save">save</button>

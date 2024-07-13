@@ -37,10 +37,13 @@ RCON_HOST = env.str("RCON_HOST", default='127.0.0.1')  # new
 RCON_PORT = env.int("RCON_PORT", default=25575)  # new
 RCON_PASS = env.str("RCON_PASS", default='mysecretpassword')  # new
 
+# MINECRAFT API SETTINGS
+API_URL = env.str("API_URL", default='https://api.mojang.com/users/profiles/minecraft')  # new
+
 # ALLOWED_HOSTS = ["*"]
 # CSRF_TRUSTED_ORIGINS = ["https://*.fly.dev"]
 
-ALLOWED_HOSTS = ["mcadmin.fly.dev", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["mcadmin.fly.dev", "mcadmin.gocs.me", "localhost", "127.0.0.1"]
 CSRF_TRUSTED_ORIGINS = ["https://mcadmin.fly.dev"]
 CSRF_ALLOWED_ORIGINS = ["https://mcadmin.fly.dev"]
 
@@ -134,10 +137,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]  # new
 STATIC_ROOT = BASE_DIR / "staticfiles"  # new
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"  # new
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
