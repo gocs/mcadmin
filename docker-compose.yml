@@ -17,8 +17,7 @@ services:
       RCON_PASSWORD: ${RCON_PASS}
       RCON_PORT: ${RCON_PORT}
       RCON_CMDS_LAST_DISCONNECT: "/save-all"
-      OPS: |
-        gocs_
+      OPS: gocs_
       SPIGET_RESOURCES: |
         28140
         34315
@@ -40,7 +39,7 @@ services:
     ports:
       - 8000:8000
     env_file:
-      - ./.env.dev
+      - ./.env
     volumes:
       - .:/code:rw
     depends_on:
@@ -54,7 +53,19 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env.dev
+      - ./.env
+    networks:
+      - mcadmin
+
+  nginx:
+    restart: always
+    image: nginx:1.17-alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    depends_on:
+      - web
     networks:
       - mcadmin
 
