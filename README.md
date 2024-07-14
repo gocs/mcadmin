@@ -10,6 +10,7 @@
 
 ## commands
 
+- copy the `.env.example` to `.env` and fill in the values
 - `make setup` start the docker containers (initial build)
 - `make up` restart the docker containers (succeeding builds)
 
