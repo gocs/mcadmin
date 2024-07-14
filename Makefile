@@ -3,13 +3,13 @@ export
 
 .PHONY: setup up down startapp makemigrations migrate createsuperuser collectstatic clear inittw tw getpayment
 
+# this is most likely to be run as sudo
 setup:
 	docker compose up --build -d
 	docker exec -it mcadmin-web-1 ./manage.py makemigrations
 	docker exec -it mcadmin-web-1 ./manage.py migrate
 	docker exec -it mcadmin-web-1 ./manage.py createsuperuser
 	docker exec -it mcadmin-web-1 ./manage.py collectstatic
-	docker exec -it mcadmin-tw-1 npm run build
 
 up:
 	docker compose up --build -d
@@ -38,6 +38,9 @@ clear:
 
 inittw:
 	npm i
+
+buildtw:
+	npm run build
 
 tw:
 	npx tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch

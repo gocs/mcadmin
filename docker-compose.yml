@@ -43,19 +43,9 @@ services:
     volumes:
       - .:/code:rw
     depends_on:
-      db: 
-        condition: service_started
-      tw:
-        condition: service_started
+      - db
     networks:
       - mcadmin
-
-  tw:
-    build:
-      context: .
-      dockerfile: Dockerfile.tw
-    volumes:
-      - .:/app:rw
 
   db:
     image: postgres:16.3-alpine
