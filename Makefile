@@ -5,9 +5,11 @@ export
 
 setup:
 	docker compose up --build -d
+	docker exec -it mcadmin-web-1 ./manage.py makemigrations
 	docker exec -it mcadmin-web-1 ./manage.py migrate
 	docker exec -it mcadmin-web-1 ./manage.py createsuperuser
 	docker exec -it mcadmin-web-1 ./manage.py collectstatic
+	docker exec -it mcadmin-tw-1 npm run build
 
 up:
 	docker compose up --build -d

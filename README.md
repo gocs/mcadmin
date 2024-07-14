@@ -1,5 +1,9 @@
 # McAdmin
 
+## requirements
+
+install docker (docker compose is included)
+
 ## todo
 
 - [x] user management

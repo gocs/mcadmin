@@ -1,13 +1,3 @@
-FROM node:20-alpine3.19 AS tailwind_build
-
-WORKDIR /app
-COPY package.json package-lock.json /app/
-
-RUN npm install
-COPY ./static/src/input.css /app/
-
-RUN npm run build
-
 # The base image we want to inherit from
 FROM python:3.11.9-slim-bookworm AS development_build
 
@@ -43,12 +33,9 @@ RUN apt-get update \
 
 # set work directory
 WORKDIR /code
-
 COPY pyproject.toml poetry.lock /code/
 
 # Install dependencies:
 RUN poetry install
-# copy tailwind css
-COPY --from=tailwind_build /app/output.css /code/static/src/output.css
 # copy project
 COPY . .
