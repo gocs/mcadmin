@@ -9,7 +9,7 @@ setup:
 	docker exec -it mcadmin-web-1 ./manage.py makemigrations
 	docker exec -it mcadmin-web-1 ./manage.py migrate
 	docker exec -it mcadmin-web-1 ./manage.py createsuperuser
-	docker exec -it mcadmin-web-1 ./manage.py collectstatic
+	docker exec -it mcadmin-web-1 ./manage.py collectstatic --no-input
 
 up:
 	docker compose up --build -d
@@ -31,16 +31,13 @@ createsuperuser:
 	docker exec -it mcadmin-web-1 ./manage.py createsuperuser
 
 collectstatic:
-	docker exec -it mcadmin-web-1 ./manage.py collectstatic
+	docker exec -it mcadmin-web-1 ./manage.py collectstatic --no-input
 
 clear:
 	docker exec -it mcadmin-web-1 cp /dev/null general.log
 
-inittw:
-	npm i
-
-buildtw:
-	npm run build
+twi:
+	npm i && npm run build
 
 tw:
 	npx tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch

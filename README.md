@@ -17,7 +17,7 @@ install docker (docker compose is included)
 
 - copy the `.env.example` to `.env` and fill in the values
 - `make setup` start the docker containers (initial build)
-- `make buildtw` build the tailwind (initial build)
+- `make twi` build the tailwind (initial build)
 - `make up` restart the docker containers (succeeding builds)
 
 the setup may pause to allow you to make a username, password, and email for the superuser
