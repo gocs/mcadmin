@@ -2,7 +2,7 @@ include .env
 export
 
 up:
-	docker compose up --build
+	docker compose up --build -d
 
 down:
 	docker compose down
@@ -26,8 +26,8 @@ collectstatic:
 clear:
 	docker exec -it mcadmin-web-1 cp /dev/null general.log
 
+inittw:
+	npm i
+
 tw:
 	npx tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch
-
-rcon:
-	go run main.go
