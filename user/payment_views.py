@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from asgiref.sync import sync_to_async
+from rest_framework import permissions, viewsets
 
 from .models import Player, Payment
+from .serializers import PaymentSerializer
 import asyncio
 
 import logging
@@ -63,3 +65,7 @@ async def index(request):
 
     return redirect('home')
 
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    permission_classes = [permissions.IsAuthenticated]

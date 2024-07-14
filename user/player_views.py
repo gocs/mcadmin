@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from asgiref.sync import sync_to_async
 
 from .models import Player
-from .minecraft import get_user
+from .minecraft import get_user, execute_command
 
 import asyncio
 
@@ -37,6 +37,10 @@ async def index(request):
             p.id = await sync_to_async(lambda: get_user_model().objects.get(id=id))()
             await p.asave()
 
+            if p.name != name:
+                await execute_command("whitelist", "remove", p.name)
+                await execute_command("whitelist", "add", name)
+
             return redirect('home')
 
         # create a new player
@@ -58,6 +62,7 @@ async def index(request):
 
         p = Player(name=mc_user['name'], uuid=mc_user['id'], id=user)
         await p.asave()
+        await execute_command("whitelist", "add", name)
     elif 'delete' in request.POST:
         uuid = request.POST.get("delete", "")
         if not uuid: return redirect('home') # uuid is required

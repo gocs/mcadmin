@@ -4,14 +4,17 @@
 
 - [x] user management
 - [x] user role
-- [ ] minecraft whitelist
+- [x] minecraft whitelist
+- [x] minecraft server status
+- [x] payment rest api
 
 ## commands
 
-- `make up` start the docker containers
-- `make makemigrations && make migrate && make createsuperuser`
-- `sudo make makemigrations && sudo make migrate && sudo make createsuperuser`
+- `make setup` start the docker containers (initial build)
+- `make up` restart the docker containers (succeeding builds)
 
-make a username, password, and email for the superuser
+the setup may pause to allow you to make a username, password, and email for the superuser
+
+see the `Makefile` for more commands
 
 - go to `http://localhost`

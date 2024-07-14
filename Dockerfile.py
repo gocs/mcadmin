@@ -44,11 +44,11 @@ RUN apt-get update \
 # set work directory
 WORKDIR /code
 
-# copy tailwind css
-COPY --from=tailwind_build /app/output.css /code/static/src/output.css
 COPY pyproject.toml poetry.lock /code/
 
 # Install dependencies:
 RUN poetry install
+# copy tailwind css
+COPY --from=tailwind_build /app/output.css /code/static/src/output.css
 # copy project
 COPY . .

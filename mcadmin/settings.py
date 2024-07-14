@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "compressor",  # new
     "todo",  # new
     "user",  # new
+    'rest_framework', # new
 ]
 
 MIDDLEWARE = [
@@ -160,3 +161,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 COMPRESS_ROOT = BASE_DIR / "static"
 COMPRESS_ENABLED = True
 STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
