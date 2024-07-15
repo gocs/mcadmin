@@ -6,10 +6,10 @@ export
 # this is most likely to be run as sudo
 setup:
 	docker compose up --build -d
-	docker exec -it mcadmin-web-1 ./manage.py makemigrations
-	docker exec -it mcadmin-web-1 ./manage.py migrate
-	docker exec -it mcadmin-web-1 ./manage.py createsuperuser
-	docker exec -it mcadmin-web-1 ./manage.py collectstatic --no-input
+	docker compose exec -it web ./manage.py makemigrations
+	docker compose exec -it web ./manage.py migrate
+	docker compose exec -it web ./manage.py createsuperuser
+	docker compose exec -it web ./manage.py collectstatic --no-input
 
 up:
 	docker compose up --build -d
@@ -18,23 +18,23 @@ down:
 	docker compose down
 
 startapp:
-	docker exec -it mcadmin-web-1 ./manage.py startapp ${APP_NAME}
-	docker exec -it mcadmin-web-1 chmod 777 -R ${APP_NAME}/
+	docker compose exec -it web ./manage.py startapp ${APP_NAME}
+	docker compose exec -it web chmod 777 -R ${APP_NAME}/
 
 makemigrations:
-	docker exec -it mcadmin-web-1 ./manage.py makemigrations
+	docker compose exec -it web ./manage.py makemigrations
 
 migrate:
-	docker exec -it mcadmin-web-1 ./manage.py migrate
+	docker compose exec -it web ./manage.py migrate
 
 createsuperuser:
-	docker exec -it mcadmin-web-1 ./manage.py createsuperuser
+	docker compose exec -it web ./manage.py createsuperuser
 
 collectstatic:
-	docker exec -it mcadmin-web-1 ./manage.py collectstatic --no-input
+	docker compose exec -it web ./manage.py collectstatic --no-input
 
 clear:
-	docker exec -it mcadmin-web-1 cp /dev/null general.log
+	docker compose exec -it web cp /dev/null general.log
 
 twi:
 	npm i && npm run build

@@ -1,5 +1,9 @@
 # McAdmin
 
+Minecraft Server Admin Panel
+
+![mcadmin site](docs/mcadmin.png?raw=true)
+
 ## requirements
 
 install npm

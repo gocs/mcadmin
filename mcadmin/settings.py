@@ -44,8 +44,8 @@ API_URL = env.str("API_URL", default='https://api.mojang.com/users/profiles/mine
 # CSRF_TRUSTED_ORIGINS = ["https://*.fly.dev"]
 
 ALLOWED_HOSTS = ["mcadmin.fly.dev", "mcadmin.gocs.me", "localhost", "127.0.0.1"]
-CSRF_TRUSTED_ORIGINS = ["https://mcadmin.fly.dev"]
-CSRF_ALLOWED_ORIGINS = ["https://mcadmin.fly.dev"]
+CSRF_TRUSTED_ORIGINS = ["https://mcadmin.fly.dev", "https://mcadmin.gocs.me"]
+CSRF_ALLOWED_ORIGINS = ["https://mcadmin.fly.dev", "https://mcadmin.gocs.me"]
 
 
 # Application definition
