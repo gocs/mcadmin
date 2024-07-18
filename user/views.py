@@ -88,16 +88,16 @@ async def index(request):
         "is_authenticated": await sync_to_async(lambda: request.user.is_authenticated)(),
     })
 
-# # signup page
-# def user_signup(request):
-#     if request.method == 'POST':
-#         form = SignupForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('login')
-#     else:
-#         form = SignupForm()
-#     return render(request, 'signup.html', {'form': form})
+# signup page
+def user_signup(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = SignupForm()
+    return render(request, 'signup.html', {'form': form})
 
 # login page
 def user_login(request):
