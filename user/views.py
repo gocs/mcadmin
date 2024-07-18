@@ -23,16 +23,25 @@ async def index(request):
     try: status = await execute_command('tps') # get server tick and memory usage
     except Exception as e: logger.critical("err status: %s" % e)
 
+    current_user = await sync_to_async(lambda: request.user)()
     payments = []
-    try: payments = [p async for p in Payment.objects.all()]
-    except Exception as e: logger.critical("err payments: %s" % e)
+    current_player = None
+    if await sync_to_async(lambda: request.user.is_staff)():
+        try: payments = [p async for p in Payment.objects.all()]
+        except Exception as e: logger.critical("err payments: %s" % e)
+    else:
+        # get the player from the user
+        try: player = await sync_to_async(lambda: Player.objects.get(id=current_user))()
+        except Exception as e: logger.critical("err player: %s" % e)
+
+        try: payments = [p async for p in Payment.objects.filter(player=player)]
+        except Exception as e: logger.critical("err payments: %s" % e)
 
     # convert players in payments to sync
     z__payments = []
-    if await sync_to_async(lambda: request.user.is_staff)():
-        for payment in payments:
-            payment.z__player = await sync_to_async(lambda: payment.player)()
-            z__payments.append(payment)
+    for payment in payments:
+        payment.z__player = await sync_to_async(lambda: payment.player)()
+        z__payments.append(payment)
 
     players = []
     try: players = [p async for p in Player.objects.all()]
@@ -74,6 +83,8 @@ async def index(request):
         'users': users,
         "player": player,
         "payment": payment,
+        "current_user": current_user,
+        "is_staff": await sync_to_async(lambda: request.user.is_staff)(),
         "is_authenticated": await sync_to_async(lambda: request.user.is_authenticated)(),
     })
 

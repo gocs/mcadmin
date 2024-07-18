@@ -6,7 +6,7 @@
             <li><a href="{% url 'logout' %}" class="hover:bg-green-200">logout</a></li>
         </ul>
 
-        {% if request.user.is_staff %}
+        {% if is_staff %}
             <p class="my-8">({{ status }})</p>
             <p class="my-8">{{ whitelist_list }}</p>
         {% else %}
@@ -14,10 +14,10 @@
             <p class="my-8"></p>
         {% endif %}
 
-        <div class="grid {% if request.user.is_staff %}grid-cols-5{% else %}grid-cols-1{% endif %} w-full">
-            <div class="grid-span-5 {% if request.user.is_staff %}md:col-span-2{% endif %}">
+        <div class="grid {% if is_staff %}grid-cols-5{% else %}grid-cols-1{% endif %} w-full">
+            <div class="grid-span-5 {% if is_staff %}md:col-span-2{% endif %}">
                 <h1 class="text-2xl font-black text-green-600">Payments</h1>
-                {% if request.user.is_staff and not payment %}
+                {% if is_staff and not payment %}
                     <div class="w-full p-2">
                         <form action="/payment/" method="POST">
                             {% include 'save_payment.html' %}
@@ -37,8 +37,11 @@
                                 <th scope="col" class="px-6 py-3">
                                     Date
                                 </th>
-                                <th scope="col" class="px-6 py-3">
-                                </th>
+                                {% if is_staff %}
+                                    <th scope="col" class="px-6 py-3">
+                                        Actions
+                                    </th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -62,14 +65,16 @@
                                         <td class="px-6 py-4">
                                             {{ p.date }}
                                         </td>
-                                        <td class="px-6 py-4 flex gap-0.5">
+                                        {% if is_staff %}
+                                            <td class="px-6 py-4 flex gap-0.5">
                                                 <a href="/?payment={{p.id}}" class="bg-yellow-400 hover:bg-yellow-600 text-white py-1 px-2">edit</a>
                                                 <form action="/payment/" method="POST">
                                                     {% csrf_token %}
                                                     <button value="{{ p.id }}" name="delete"
                                                         class="bg-red-400 hover:bg-red-600 text-white py-1 px-2">delete</button>
                                                 </form>
-                                        </td>
+                                            </td>
+                                        {% endif %}
                                     {% endif %}
                                 </tr>
                             {% empty %}
@@ -83,7 +88,7 @@
                     </table>
                 </div>
             </div>
-            {% if request.user.is_staff %}
+            {% if is_staff %}
             <div class="grid-span-5 md:col-span-3">
                 <h1 class="text-2xl font-black text-green-600">Players</h1>
                 {% if not player %}
