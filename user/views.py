@@ -29,9 +29,10 @@ async def index(request):
 
     # convert players in payments to sync
     z__payments = []
-    for payment in payments:
-        payment.z__player = await sync_to_async(lambda: payment.player)()
-        z__payments.append(payment)
+    if await sync_to_async(lambda: request.user.is_staff)():
+        for payment in payments:
+            payment.z__player = await sync_to_async(lambda: payment.player)()
+            z__payments.append(payment)
 
     players = []
     try: players = [p async for p in Player.objects.all()]

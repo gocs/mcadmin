@@ -1,5 +1,9 @@
 {% csrf_token %}
-<input type="text" name="name" class="mb-2" placeholder="minecraft username" required value="{{ player.name }}">
+{% if request.GET.player %}
+    <input type="text" readonly class="mb-2 bg-gray-200" placeholder="minecraft username" required value="{{ player.name }}">
+{% else %}
+    <input type="text" name="name" class="mb-2" placeholder="minecraft username" required value="{{ player.name }}">
+{% endif %}
 <select name="id" class="mb-2" required value="{{ player.z__user.id }}">
     {% for user in users %}
         <option value="{{ user.id }}" {% if player.z__user.id == user.id %}selected{% endif %}>{{ user.username }}</option>

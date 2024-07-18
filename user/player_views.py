@@ -33,13 +33,14 @@ async def index(request):
             id = request.POST.get("id", "")
             if not id: return redirect('home') # id is required
 
-            p.name = name
-            p.id = await sync_to_async(lambda: get_user_model().objects.get(id=id))()
-            await p.asave()
+            if p.name != name: # don't update if the name is the same
+                old_name = p.name
+                p.name = name
+                p.id = await sync_to_async(lambda: get_user_model().objects.get(id=id))()
+                await p.asave()
 
-            if p.name != name:
-                await execute_command("whitelist", "remove", p.name)
-                await execute_command("whitelist", "add", name)
+                await execute_command("whitelist", "remove", old_name)
+                await execute_command("whitelist", "add", p.name)
 
             return redirect('home')
 
@@ -73,5 +74,6 @@ async def index(request):
         except Exception as e: logger.critical("err deleting player: %s" % e)
         if not p: return redirect('home')
         await p.adelete()
+        await execute_command("whitelist", "remove", p.name)
 
     return redirect('home')

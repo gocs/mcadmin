@@ -2,7 +2,7 @@
 {% block content %}
     {% if is_authenticated %}
         <ul class="flex justify-end font-mono text-xl font-black">
-            <li class="flex-1"><p class="text-green-800">{{ request.user.username }}</p></li>
+            <li class="flex-1"><a href="/"><p class="text-green-800">{{ request.user.username }}</p></a></li>
             <li><a href="{% url 'logout' %}" class="hover:bg-green-200">logout</a></li>
         </ul>
 
