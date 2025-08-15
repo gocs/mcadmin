@@ -9,7 +9,7 @@ readme = "README.md"
 python = "^3.11"
 django = "^5.0.8"
 psycopg2 = "^2.9.9"
-gunicorn = "^22.0.0"
+gunicorn = "^23.0.0"
 psycopg = {extras = ["binary"], version = "^3.2.1"}
 environs = {extras = ["django"], version = "^11.0.0"}
 whitenoise = "^6.7.0"
